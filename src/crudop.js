@@ -1,8 +1,7 @@
 // get input from task form
 const formEl = document.querySelector('.input-container');
 const taskTitle = document.querySelector('#taskInput');
-const taskList = document.querySelector('.taskList');
-export default taskList;
+export const taskList = document.querySelector('.taskList');
 // array of task items
 let taskArr = [];
 if (localStorage.length > 0) {
@@ -34,7 +33,7 @@ export const updateUI = () => {
   </button>
 
   <input id=${taskArr[i].index}  type="text" data-desc="${taskArr[i].index}" class="task ${cross}" value="${taskArr[i].tasktitle}"/>
-  <button id=${taskArr[i].index} class="btn btn-delete"><i class="fa-solid fa-trash-can"></i></button></li>
+  <a id=${taskArr[i].index} class="btn btn-delete"><i class="fa-solid fa-trash-can"></i></a></li>
   
   `;
     taskList.insertAdjacentHTML('beforeend', createList);
@@ -66,7 +65,7 @@ const addTask = (e) => {
   </button>
 
   <input id=${newTask.index}  type="text" data-desc="${newTask.index} " class="task" value="${newTask.tasktitle}"/>
-  <button id=${newTask.index} class="btn btn-delete"><i class="fa-solid fa-trash-can"></i></button></li>
+  <a id=${newTask.index} class="btn btn-delete"><i class="fa-solid fa-trash-can"></i></a></li>
   
   `;
   taskList.insertAdjacentHTML('beforeend', createList);
@@ -96,6 +95,16 @@ const remove = (e) => {
   // remove on the display
   const taskToRemove = document.getElementById(clicked.id);
   taskToRemove.parentNode.removeChild(taskToRemove);
+  // for all ids above the one removed decrease from 1
+  console.log('the removed id is');
+  console.log(clicked.id);
+  const deleteBtn = document.querySelectorAll('.taskList li a');
+  const liList = document.querySelectorAll('.taskList li');
+  for (let i = clicked.id - 1; i < liList.length; i += 1) {
+    liList[i].id -= 1;
+    deleteBtn[i].id -= 1;
+  }
+  // updte local storage
   localStorage.setItem('tasks', JSON.stringify(taskArr));
 };
 
